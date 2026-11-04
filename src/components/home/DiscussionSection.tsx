@@ -160,13 +160,15 @@ export default function DiscussionSection() {
           data: d,
         })
       ),
-      ...agendas.map(
-        (a): FeedItem => ({
-          kind: "agenda",
-          start: agendaStart(a).getTime(),
-          data: a,
-        })
-      ),
+      ...agendas
+        .filter((a) => !a.discussionId)
+        .map(
+          (a): FeedItem => ({
+            kind: "agenda",
+            start: agendaStart(a).getTime(),
+            data: a,
+          })
+        ),
     ];
     return items.sort((x, y) => x.start - y.start);
   }, [discussions, agendas]);
@@ -239,11 +241,16 @@ export default function DiscussionSection() {
         });
         adjustCount(discussionId, -1);
 
-        // Hapus juga dari Jadwal user
+        // Hapus juga dari Jadwal user (schedules & agendas)
         const { error: scheduleError } = await supabase
           .from("schedules")
           .delete()
           .eq("user_id", dbUser.id)
+          .eq("discussion_id", discussionId);
+
+        await supabase
+          .from("agendas")
+          .delete()
           .eq("discussion_id", discussionId);
 
         if (scheduleError) {

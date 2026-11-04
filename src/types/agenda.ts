@@ -1,5 +1,6 @@
 export interface Agenda {
   id: string;
+  discussionId?: number;
   judul: string;
   kategori: string;
   tanggal: string;

@@ -6,7 +6,7 @@ import type { DbUser } from "@/types/user";
 
 /**
  * Mengambil baris tabel `users` milik akun yang sedang login.
- * Akun Supabase Auth dicocokkan ke tabel `users` lewat email.
+ * Akun Supabase Auth dicocokkan lewat `firebase_uid` (UUID Auth) atau `email`.
  */
 export function useCurrentUser() {
   const [dbUser, setDbUser] = useState<DbUser | null>(null);
@@ -21,19 +21,32 @@ export function useCurrentUser() {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (!user || !user.email) {
+      if (!user) {
         if (!cancelled) setLoading(false);
         return;
       }
 
-      // Karakter khusus LIKE di-escape supaya email dicocokkan apa adanya
-      const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
-      const { data, error: queryError } = await supabase
+      // 1. Cari berdasarkan firebase_uid (UUID Supabase Auth)
+      let { data, error: queryError } = await supabase
         .from("users")
         .select("id, name, avatar_url")
-        .ilike("email", emailPattern)
+        .eq("firebase_uid", user.id)
         .limit(1)
         .maybeSingle();
+
+      // 2. Fallback: cari berdasarkan email jika belum ketemu lewat firebase_uid
+      if (!data && user.email) {
+        const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
+        const fallback = await supabase
+          .from("users")
+          .select("id, name, avatar_url")
+          .ilike("email", emailPattern)
+          .limit(1)
+          .maybeSingle();
+
+        data = fallback.data;
+        queryError = fallback.error;
+      }
 
       if (cancelled) return;
 

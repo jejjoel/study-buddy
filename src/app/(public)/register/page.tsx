@@ -66,7 +66,7 @@ export default function RegistrasiPage() {
 
       // 3. Jika berhasil, otomatis trigger database akan mencatat ke tabel profiles,
       // lalu arahkan user ke halaman pilihan bidang minat
-      router.push("/bidang-minat");
+      router.push("/interests");
     } catch (err) {
       setError("Terjadi kesalahan pada sistem.");
       setLoading(false);

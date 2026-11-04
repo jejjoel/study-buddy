@@ -1,9 +1,9 @@
-
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
 import "./bidang-minat.css";
 
 const interestOptions = [
@@ -43,6 +43,7 @@ export default function BidangMinatPage() {
   ]);
 
   const [message, setMessage] = useState("");
+  const [saving, setSaving] = useState(false);
 
   function toggleInterest(interest: string) {
     setMessage("");
@@ -63,10 +64,31 @@ export default function BidangMinatPage() {
     });
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     if (selectedInterests.length === 0) {
       setMessage("Pilih minimal satu bidang minat atau tekan Lewati.");
       return;
+    }
+
+    setSaving(true);
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        await supabase
+          .from("users")
+          .update({
+            interests: selectedInterests,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("firebase_uid", user.id);
+      }
+    } catch (err) {
+      console.warn("Gagal menyimpan bidang minat:", err);
+    } finally {
+      setSaving(false);
     }
 
     // Lanjut ke halaman profil
@@ -146,8 +168,9 @@ export default function BidangMinatPage() {
           type="button"
           className="interest-continue"
           onClick={handleContinue}
+          disabled={saving}
         >
-          Selanjutnya
+          {saving ? "Menyimpan..." : "Selanjutnya"}
         </button>
 
         <div

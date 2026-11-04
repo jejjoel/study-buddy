@@ -5,6 +5,7 @@ import type { Agenda } from "@/types/agenda";
 
 type AgendaRow = {
   id: string;
+  discussion_id: number | null;
   judul: string;
   kategori: string;
   tanggal: string; // "YYYY-MM-DD"
@@ -15,11 +16,12 @@ type AgendaRow = {
 };
 
 const COLUMNS =
-  "id, judul, kategori, tanggal, jam_mulai, jam_selesai, kode_room, catatan";
+  "id, discussion_id, judul, kategori, tanggal, jam_mulai, jam_selesai, kode_room, catatan";
 
 function fromRow(row: AgendaRow): Agenda {
   return {
     id: row.id,
+    discussionId: row.discussion_id ?? undefined,
     judul: row.judul,
     kategori: row.kategori,
     tanggal: row.tanggal,

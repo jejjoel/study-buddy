@@ -203,7 +203,7 @@ export default function SearchExperience({
       if (wantPeople) {
         let query = supabase
           .from("users")
-          .select("*")
+          .select("id, name, avatar_url, major, study_program, semester, faculty, university")
           .neq("id", myId)
           .order("name", { ascending: true })
           .limit(RESULT_LIMIT);
