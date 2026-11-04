@@ -1,0 +1,581 @@
+
+/* ===========================================================
+   PROFILE PAGE — EDIT PROFIL
+   Mendukung Light Mode dan Dark Mode
+   Layout: max-width 1100px
+   Konten: max-width 760px
+   =========================================================== */
+
+/* ----------------------- HALAMAN UTAMA ----------------------- */
+
+.screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding-bottom: 85px;
+
+  background: var(--bg-primary, #ffffff);
+  color: var(--text-primary, #172033);
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* ---------------------------- HEADER ------------------------- */
+
+.topHeader {
+  display: grid;
+  grid-template-columns: 42px 1fr 42px;
+  align-items: center;
+  height: 75px;
+  flex-shrink: 0;
+  padding: 0 28px;
+
+  border-bottom: 1px solid var(--border-color, #f0f3f8);
+  background: var(--bg-primary, #ffffff);
+}
+
+.backArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-primary, #172033);
+
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Mengikuti warna teks pada Light dan Dark Mode */
+.backArrow svg {
+  display: block;
+}
+
+.backArrow svg path {
+  stroke: currentColor;
+}
+
+.backArrow:hover {
+  background: var(--bg-secondary, #edf5ff);
+}
+
+.screenTitle {
+  margin: 0;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text-primary, #172033);
+}
+
+.headerSpacer {
+  width: 40px;
+  height: 40px;
+}
+
+/* ----------------------------- BODY -------------------------- */
+
+.bodyContent {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 30px 25px 35px;
+}
+
+/* ----------------------- IDENTITAS USER ---------------------- */
+
+.identitySection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 0 2px;
+  text-align: center;
+}
+
+.avatarContainer {
+  position: relative;
+  width: 116px;
+  height: 116px;
+}
+
+.avatarCircle {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  border: 4px solid var(--bg-card, #ffffff);
+  border-radius: 50%;
+  background: var(--bg-secondary, #edf5ff);
+
+  box-shadow: 0 10px 26px rgba(54, 136, 245, 0.18);
+}
+
+.avatarImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.editBadge {
+  position: absolute;
+  right: 0;
+  bottom: 6px;
+
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+
+  border: 3px solid var(--bg-card, #ffffff);
+  border-radius: 50%;
+  background: var(--blue, #3688f5);
+
+  box-shadow: 0 6px 14px rgba(54, 136, 245, 0.25);
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.editBadge:hover {
+  background: var(--blue-dark, #2563eb);
+  transform: scale(1.06);
+}
+
+.editBadgeImg {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.userName {
+  margin: 18px 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text-primary, #172033);
+}
+
+.userMeta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+
+  color: var(--text-secondary, #64748b);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.metaDivider {
+  color: var(--border-color, #cdd7e5);
+}
+
+/* ------------------------- KARTU MENU ------------------------ */
+
+/* Kartu menu tetap biru sesuai desain StudyBuddy */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  background: var(--blue, #3688f5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+
+  box-shadow: 0 8px 20px rgba(54, 136, 245, 0.15);
+}
+
+.cardRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 20px;
+
+  border: none;
+  background: transparent;
+  color: #ffffff;
+
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+
+  transition: background-color 0.18s ease;
+}
+
+.cardRow:not(:first-child) {
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.cardRow:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cardRow:focus-visible,
+.backArrow:focus-visible,
+.editBadge:focus-visible {
+  outline: 2px solid var(--blue-dark, #2563eb);
+  outline-offset: 3px;
+}
+
+.rowLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rowIcon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.rowRight {
+  flex-shrink: 0;
+  color: #e4efff;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------------------- TOGGLE NOTIFIKASI -------------------- */
+
+.notificationSwitch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+
+  width: 46px;
+  height: 26px;
+  padding: 3px;
+
+  border: none;
+  border-radius: 999px;
+
+  transition: background-color 0.2s ease;
+}
+
+.switchOn {
+  background-color: #2563eb;
+}
+
+.switchOff {
+  background-color: #cbd2dc;
+}
+
+.switchKnob {
+  display: block;
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+
+  transition: transform 0.2s ease;
+}
+
+.switchOn .switchKnob {
+  transform: translateX(20px);
+}
+
+.switchOff .switchKnob {
+  transform: translateX(0);
+}
+
+/* ---------------------- LOGOUT & HAPUS AKUN ------------------ */
+
+.actionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* Baris hapus akun menggunakan warna netral */
+.dangerRow {
+  color: #ffffff;
+}
+
+.dangerRow:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ------------------------ MODAL OVERLAY ---------------------- */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+/* --------------------------- MODAL --------------------------- */
+
+.modal {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 420px;
+  padding: 28px;
+
+  border: 1px solid var(--border-color, #e8edf5);
+  border-radius: 20px;
+
+  background: var(--bg-card, #ffffff);
+  color: var(--text-primary, #202b3c);
+
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.modal h2 {
+  margin: 0 0 12px;
+  color: var(--text-primary, #202b3c);
+
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.modalDescription {
+  margin: 0 0 22px;
+
+  color: var(--text-secondary, #64748b);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 8px;
+
+  color: var(--text-primary, #334155);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.emailInput {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+
+  border: 1px solid var(--border-color, #d7deea);
+  border-radius: 10px;
+  outline: none;
+
+  background: var(--bg-secondary, #ffffff);
+  color: var(--text-primary, #202b3c);
+
+  font-family: inherit;
+  font-size: 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.emailInput::placeholder {
+  color: var(--text-secondary, #8791a3);
+}
+
+.emailInput:focus {
+  border-color: var(--blue, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.modalNote {
+  margin: 14px 0 0;
+
+  color: var(--text-secondary, #8791a3);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.errorMessage {
+  margin: 8px 0 0;
+  color: #dc2626;
+  font-size: 12px;
+}
+
+/* ------------------------ TOMBOL MODAL ----------------------- */
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.cancelButton,
+.primaryButton,
+.deleteButton {
+  min-height: 42px;
+  padding: 10px 16px;
+
+  border: 1px solid transparent;
+  border-radius: 10px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Tombol batal */
+.cancelButton {
+  border-color: var(--border-color, #e2e8f0);
+  background: var(--bg-secondary, #f1f5f9);
+  color: var(--text-primary, #475569);
+}
+
+.cancelButton:hover {
+  background: var(--border-color, #e2e8f0);
+}
+
+/* Tombol utama */
+.primaryButton {
+  background: var(--blue, #2563eb);
+  color: #ffffff;
+}
+
+.primaryButton:hover {
+  background: var(--blue-dark, #1d4ed8);
+}
+
+/* Tombol hapus: netral, tidak merah mencolok */
+.deleteButton {
+  border-color: var(--border-color, #e2e8f0);
+  background: var(--bg-secondary, #f1f5f9);
+  color: var(--text-primary, #475569);
+}
+
+.deleteButton:hover {
+  background: var(--border-color, #e2e8f0);
+}
+
+/* --------------------------- RESPONSIF ----------------------- */
+
+@media (max-width: 760px) {
+  .topHeader {
+    height: 70px;
+    padding: 0 18px;
+  }
+
+  .bodyContent {
+    padding: 24px 18px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 22px;
+    border-radius: 16px;
+  }
+
+  .modal h2 {
+    font-size: 19px;
+  }
+
+  .modalActions {
+    gap: 8px;
+  }
+
+  .cancelButton,
+  .primaryButton,
+  .deleteButton {
+    flex: 1;
+    padding: 10px 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  .avatarContainer {
+    width: 100px;
+    height: 100px;
+  }
+
+  .userName {
+    font-size: 18px;
+  }
+
+  .cardRow {
+    padding: 14px 15px;
+  }
+
+  .rowLeft {
+    font-size: 13px;
+  }
+}
+
+/* ----------------------- PREFERENSI GERAK -------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .screen,
+  .topHeader,
+  .cardRow,
+  .editBadge,
+  .modal,
+  .emailInput,
+  .notificationSwitch,
+  .switchKnob,
+  .cancelButton,
+  .primaryButton,
+  .deleteButton {
+    transition: none;
+  }
+}

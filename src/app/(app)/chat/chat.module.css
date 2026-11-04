@@ -1,0 +1,438 @@
+
+/* ===========================================================
+   CHAT PAGE — STUDYBUDDY
+   Mendukung Light Mode dan Dark Mode
+   Shell   : max-width 1100px
+   Konten  : max-width 760px
+   Header  : 75px
+   =========================================================== */
+
+/* ------------------------- HALAMAN UTAMA -------------------- */
+
+.screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding-bottom: 85px;
+  box-sizing: border-box;
+
+  background: var(--bg-primary, var(--white, #ffffff));
+  color: var(--text-primary, var(--text, #172033));
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* ---------------------------- HEADER ------------------------ */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  height: 75px;
+  flex-shrink: 0;
+  padding: 0 28px;
+
+  border-bottom: 1px solid var(--border-color, #f0f3f8);
+  background: var(--bg-primary, var(--white, #ffffff));
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.logoWrap {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: auto;
+  height: 48px;
+  object-fit: contain;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+  color: var(--accent-color, var(--blue, #3688f5));
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.iconButton:hover {
+  background: var(--bg-secondary, var(--blue-light, #edf5ff));
+}
+
+/* ----------------------------- BODY ------------------------- */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 22px 25px 35px;
+  box-sizing: border-box;
+}
+
+/* -------------------------- SEARCH BAR ---------------------- */
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 6px 6px 6px 18px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  background: var(--bg-secondary, #f5f5f5);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+
+  border: none;
+  outline: none;
+  background: transparent;
+
+  font: inherit;
+  font-size: 14px;
+
+  color: var(--text-primary, var(--text, #172033));
+}
+
+.searchInput::placeholder {
+  color: var(--text-secondary, #757575);
+}
+
+.searchInput:focus-visible {
+  outline: none;
+}
+
+.searchButton {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 38px;
+  height: 38px;
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: var(--blue, #3688f5);
+  color: #ffffff;
+
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+
+.searchButton:hover {
+  background: var(--blue-dark, #2563eb);
+}
+
+/* --------------------------- TAB FILTER --------------------- */
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 8px 18px;
+
+  border: none;
+  border-radius: 999px;
+
+  background: transparent;
+  color: var(--text-secondary, #757575);
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.tab:hover {
+  color: var(--accent-color, var(--blue, #3688f5));
+}
+
+.tabActive {
+  background: var(--blue, #3688f5);
+  color: #ffffff;
+}
+
+.tabActive:hover {
+  background: var(--blue-dark, #2563eb);
+  color: #ffffff;
+}
+
+/* --------------------------- CHAT LIST ----------------------- */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chatItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  width: 100%;
+  padding: 14px 4px;
+  box-sizing: border-box;
+
+  border: none;
+  border-bottom: 1px solid var(--border-color, #f0f3f8);
+
+  background: var(--bg-primary, var(--white, #ffffff));
+  color: var(--text-primary, var(--text, #172033));
+
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.chatItem:hover {
+  background: var(--bg-secondary, var(--blue-light, #edf5ff));
+}
+
+.chatItem:focus-visible {
+  outline: 2px solid var(--blue, #3688f5);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
+.chatItem:last-child {
+  border-bottom: none;
+}
+
+/* ----------------------------- AVATAR ----------------------- */
+
+
+/* ----------------------------- AVATAR ----------------------- */
+
+.avatarWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  background: var(--bg-secondary, #edf5ff);
+}
+
+.avatarImg {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  min-width: 48px;
+  min-height: 48px;
+
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.groupAvatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+
+  background: var(--bg-secondary, var(--blue-light, #edf5ff));
+  color: var(--accent-color, var(--blue, #3688f5));
+
+  font-size: 22px;
+}
+
+
+/* ------------------------ NAMA & PESAN ---------------------- */
+
+.chatContent {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.chatName {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: var(--text-primary, #1e1e1e);
+
+  transition: color 0.25s ease;
+}
+
+.chatMessage {
+  margin: 0;
+  overflow: hidden;
+
+  color: var(--text-secondary, #757575);
+
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------- DARK MODE ---------------------- */
+
+:global(html[data-theme="dark"]) .screen {
+  background: var(--bg-primary, #111827);
+  color: var(--text-primary, #f9fafb);
+}
+
+:global(html[data-theme="dark"]) .header {
+  background: var(--bg-primary, #111827);
+  border-bottom-color: var(--border-color, #374151);
+}
+
+:global(html[data-theme="dark"]) .searchBar {
+  background: var(--bg-secondary, #1f2937);
+  border-color: var(--border-color, #374151);
+}
+
+:global(html[data-theme="dark"]) .searchInput {
+  color: var(--text-primary, #f9fafb);
+}
+
+:global(html[data-theme="dark"]) .searchInput::placeholder {
+  color: var(--text-secondary, #cbd5e1);
+}
+
+:global(html[data-theme="dark"]) .tab {
+  color: var(--text-secondary, #cbd5e1);
+}
+
+:global(html[data-theme="dark"]) .tab:hover {
+  color: var(--accent-color, #60a5fa);
+}
+
+:global(html[data-theme="dark"]) .tabActive {
+  background: var(--blue, #3688f5);
+  color: #ffffff;
+}
+
+:global(html[data-theme="dark"]) .chatItem {
+  background: var(--bg-primary, #111827);
+  border-bottom-color: var(--border-color, #374151);
+  color: var(--text-primary, #f9fafb);
+}
+
+:global(html[data-theme="dark"]) .chatItem:hover {
+  background: var(--bg-secondary, #1f2937);
+}
+
+:global(html[data-theme="dark"]) .chatName {
+  color: var(--text-primary, #f9fafb);
+}
+
+:global(html[data-theme="dark"]) .chatMessage {
+  color: var(--text-secondary, #cbd5e1);
+}
+
+:global(html[data-theme="dark"]) .groupAvatar {
+  background: var(--bg-secondary, #1f2937);
+  color: var(--accent-color, #60a5fa);
+}
+
+:global(html[data-theme="dark"]) .iconButton:hover {
+  background: var(--bg-secondary, #1f2937);
+}
+
+/* --------------------------- RESPONSIF ---------------------- */
+
+@media (max-width: 760px) {
+  .header {
+    height: 68px;
+    padding: 0 18px;
+  }
+
+  .logo {
+    height: 42px;
+  }
+
+  .body {
+    padding: 18px 18px 30px;
+  }
+}
+
+/* -------------------- PREFERENSI ANIMASI -------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .screen,
+  .header,
+  .iconButton,
+  .searchBar,
+  .searchButton,
+  .tab,
+  .chatItem,
+  .chatName {
+    transition: none;
+  }
+}
