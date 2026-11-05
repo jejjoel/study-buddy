@@ -5,7 +5,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import { fetchAgendas } from "@/lib/services/agenda";
 import type { Agenda } from "@/types/agenda";
-import { useCurrentUser } from "./useCurrentUser";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 type DiscussionRow = {
   id: number;
