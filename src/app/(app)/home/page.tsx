@@ -52,14 +52,24 @@ async function createGroup(e: FormEvent<HTMLFormElement>) {
       return;
     }
 
-    // 2. Cari ID user di tabel `users` berdasarkan email
-    const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
-    const { data: me } = await supabase
+    // 2. Cari ID user di tabel `users` berdasarkan firebase_uid atau email
+    let { data: me } = await supabase
       .from("users")
       .select("id")
-      .ilike("email", emailPattern)
+      .eq("firebase_uid", user.id)
       .limit(1)
       .maybeSingle();
+
+    if (!me && user.email) {
+      const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
+      const fallback = await supabase
+        .from("users")
+        .select("id")
+        .ilike("email", emailPattern)
+        .limit(1)
+        .maybeSingle();
+      me = fallback.data;
+    }
 
     if (!me) {
       alert("Akun belum terdaftar di tabel users.");

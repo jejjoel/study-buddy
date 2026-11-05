@@ -58,12 +58,24 @@ export default function ChatPage() {
           return;
         }
 
-        // Mengambil ID pengguna dari tabel users
-        const { data: me, error: meError } = await supabase
+        // Mengambil ID pengguna dari tabel users (firebase_uid atau fallback email)
+        let { data: me, error: meError } = await supabase
           .from("users")
           .select("id")
           .eq("firebase_uid", user.id)
           .maybeSingle();
+
+        if (!me && user.email) {
+          const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
+          const fallback = await supabase
+            .from("users")
+            .select("id")
+            .ilike("email", emailPattern)
+            .limit(1)
+            .maybeSingle();
+          me = fallback.data;
+          meError = fallback.error;
+        }
 
         if (meError) throw meError;
 

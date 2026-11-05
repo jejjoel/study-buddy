@@ -78,15 +78,25 @@ export default function StorySection() {
       return;
     }
 
-    // Cocokkan akun yang login (Supabase Auth) ke baris tabel `users` lewat email.
-    // Karakter khusus LIKE di-escape supaya email dicocokkan apa adanya.
-    const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
-    const { data: me, error: meError } = await supabase
+    // Cocokkan akun yang login (Supabase Auth) ke baris tabel `users` lewat firebase_uid atau email.
+    let { data: me, error: meError } = await supabase
       .from("users")
       .select("id, name, avatar_url")
-      .ilike("email", emailPattern)
+      .eq("firebase_uid", user.id)
       .limit(1)
       .maybeSingle();
+
+    if (!me && user.email) {
+      const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
+      const fallback = await supabase
+        .from("users")
+        .select("id, name, avatar_url")
+        .ilike("email", emailPattern)
+        .limit(1)
+        .maybeSingle();
+      me = fallback.data;
+      meError = fallback.error;
+    }
 
     if (meError || !me) {
       console.error("Akun belum ada di tabel users:", meError?.message);

@@ -63,13 +63,23 @@ function ChatRoomContent() {
         return;
       }
 
-      const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
-      const { data: me } = await supabase
+      let { data: me } = await supabase
         .from("users")
         .select("id")
-        .ilike("email", emailPattern)
+        .eq("firebase_uid", user.id)
         .limit(1)
         .maybeSingle();
+
+      if (!me && user.email) {
+        const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
+        const fallback = await supabase
+          .from("users")
+          .select("id")
+          .ilike("email", emailPattern)
+          .limit(1)
+          .maybeSingle();
+        me = fallback.data;
+      }
 
       if (!me) {
         setChatError("Akun kamu belum terdaftar di tabel users.");
@@ -107,7 +117,7 @@ function ChatRoomContent() {
         // Ambil data personal teman
         const { data: person, error } = await supabase
           .from("users")
-          .select("*")
+          .select("id, name, major, study_program, avatar_url")
           .eq("id", targetId)
           .maybeSingle();
 
@@ -123,7 +133,7 @@ function ChatRoomContent() {
 
           setContact({
             name,
-            status: person.major || person.prodi || "Teman StudyBuddy",
+            status: person.major || person.study_program || "Teman StudyBuddy",
             avatar: initials || "SB",
             isGroup: false,
           });

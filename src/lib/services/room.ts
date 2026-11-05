@@ -182,8 +182,8 @@ export function useRoomList() {
 
     const channel = supabase
       .channel("room-list")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "study_room_participants" }, schedule)
-      .on("postgres_changes", { event: "DELETE", schema: "public", table: "study_room_participants" }, schedule)
+      .on("postgres_changes", { event: "*", schema: "public", table: "study_room_participants" }, schedule)
+      .on("postgres_changes", { event: "*", schema: "public", table: "study_rooms" }, schedule)
       .subscribe();
 
     return () => {
@@ -271,12 +271,7 @@ export function useRoomParticipants(roomId: string | null) {
       .channel(`room-members-${roomId}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "study_room_participants", filter: `room_id=eq.${roomId}` },
-        refresh
-      )
-      .on(
-        "postgres_changes",
-        { event: "DELETE", schema: "public", table: "study_room_participants", filter: `room_id=eq.${roomId}` },
+        { event: "*", schema: "public", table: "study_room_participants", filter: `room_id=eq.${roomId}` },
         refresh
       )
       .subscribe();

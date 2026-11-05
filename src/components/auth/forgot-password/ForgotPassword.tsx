@@ -1,12 +1,38 @@
+"use client";
+
+import { useState } from "react";
+import { supabase } from "@/lib/supabase/client";
 import Header from "./Header";
 import Dots from "./Dots";
 
 type Props = { email: string; setEmail: (v: string) => void; onNext: () => void };
 
-const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
 export default function ForgotPassword({ email, setEmail, onNext }: Props) {
   const valid = isValidEmail(email);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSendOtp() {
+    if (!valid || loading) return;
+    setErrorMsg("");
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim());
+      if (error) {
+        setErrorMsg(error.message || "Gagal mengirim kode pemulihan.");
+        setLoading(false);
+        return;
+      }
+      onNext();
+    } catch {
+      setErrorMsg("Terjadi kesalahan saat menghubungi server.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <>
@@ -31,7 +57,10 @@ export default function ForgotPassword({ email, setEmail, onNext }: Props) {
             inputMode="email"
             autoComplete="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setErrorMsg("");
+            }}
             placeholder="nama@email.com"
             className="fp-input"
           />
@@ -42,9 +71,15 @@ export default function ForgotPassword({ email, setEmail, onNext }: Props) {
           )}
         </div>
         {email && !valid && <p className="fp-error">Format email belum benar.</p>}
+        {errorMsg && <p className="fp-error">{errorMsg}</p>}
 
-        <button type="button" disabled={!valid} onClick={onNext} className="fp-button">
-          Kirim OTP
+        <button
+          type="button"
+          disabled={!valid || loading}
+          onClick={handleSendOtp}
+          className="fp-button"
+        >
+          {loading ? "Mengirim..." : "Kirim OTP"}
         </button>
       </section>
       <Dots total={2} active={0} />

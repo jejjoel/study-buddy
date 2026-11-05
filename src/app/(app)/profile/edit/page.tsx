@@ -48,11 +48,23 @@ export default function EditProfilPage() {
           return;
         }
 
-        const { data: profile, error } = await supabase
+        let { data: profile, error } = await supabase
           .from("users")
-          .select("*")
+          .select("name, email, phone_number, genre, semester, faculty, major, gpa, avatar_url")
           .eq("firebase_uid", user.id)
           .maybeSingle();
+
+        if (!profile && user.email) {
+          const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
+          const fallback = await supabase
+            .from("users")
+            .select("name, email, phone_number, genre, semester, faculty, major, gpa, avatar_url")
+            .ilike("email", emailPattern)
+            .limit(1)
+            .maybeSingle();
+          profile = fallback.data;
+          error = fallback.error;
+        }
 
         if (error) {
           throw error;

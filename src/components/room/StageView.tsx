@@ -8,7 +8,7 @@ export interface StageViewProps {
 }
 
 export default function StageView({
-  presenterName = "Max Zul",
+  presenterName = "Host Room",
   screenStream = null,
 }: StageViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -24,6 +24,13 @@ export default function StageView({
       videoRef.current.srcObject = screenStream;
     }
   }, [screenStream]);
+
+  // Sinkronkan slider volume ke elemen video
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.volume = Math.max(0, Math.min(1, volume / 100));
+    }
+  }, [volume, screenStream]);
 
   // Dengarkan perubahan status Fullscreen
   useEffect(() => {

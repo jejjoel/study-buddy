@@ -59,12 +59,24 @@ export default function ProfilePage() {
         setEmail(user.email || "");
         setNewEmail(user.email || "");
 
-        // Mengambil profil dari tabel users
-        const { data: profile, error: profileError } = await supabase
+        // Mengambil profil dari tabel users (firebase_uid atau fallback email)
+        let { data: profile, error: profileError } = await supabase
           .from("users")
           .select("name, email, avatar_url")
           .eq("firebase_uid", user.id)
           .maybeSingle();
+
+        if (!profile && user.email) {
+          const emailPattern = user.email.replace(/[\\%_]/g, "\\$&");
+          const fallback = await supabase
+            .from("users")
+            .select("name, email, avatar_url")
+            .ilike("email", emailPattern)
+            .limit(1)
+            .maybeSingle();
+          profile = fallback.data;
+          profileError = fallback.error;
+        }
 
         if (profileError) {
           throw profileError;

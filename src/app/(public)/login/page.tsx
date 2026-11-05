@@ -40,8 +40,14 @@ export default function LoginPage() {
         return;
       }
 
-      // 3. Jika berhasil, arahkan ke halaman home
-      router.push("/home");
+      // 3. Jika berhasil, arahkan ke halaman tujuan (next) atau /home
+      const params = new URLSearchParams(window.location.search);
+      const nextUrl = params.get("next");
+      const safeRedirect =
+        nextUrl && nextUrl.startsWith("/") && !nextUrl.startsWith("//")
+          ? nextUrl
+          : "/home";
+      router.push(safeRedirect);
     } catch (err) {
       setError("Terjadi kesalahan pada sistem.");
       setLoading(false);

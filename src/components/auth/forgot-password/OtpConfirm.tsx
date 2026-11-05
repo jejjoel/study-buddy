@@ -1,16 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/lib/supabase/client";
 import Header from "./Header";
 import Dots from "./Dots";
 
 type Props = { email: string; onBack: () => void; onNext: () => void };
 
-const START = 12;
+const START = 60;
 
 export default function OtpConfirm({ email, onBack, onNext }: Props) {
-  const [code, setCode] = useState(["", "", "", ""]);
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [seconds, setSeconds] = useState(START);
+  const [verifying, setVerifying] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const refs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -21,17 +24,58 @@ export default function OtpConfirm({ email, onBack, onNext }: Props) {
 
   const setDigit = (i: number, v: string) => {
     const d = v.replace(/\D/g, "").slice(-1);
+    setErrorMsg("");
     setCode((c) => c.map((x, idx) => (idx === i ? d : x)));
-    if (d && i < 3) refs.current[i + 1]?.focus();
+    if (d && i < code.length - 1) refs.current[i + 1]?.focus();
   };
 
   const onKey = (i: number, e: React.KeyboardEvent) => {
     if (e.key === "Backspace" && !code[i] && i > 0) refs.current[i - 1]?.focus();
   };
 
-  const complete = code.every(Boolean);
+  const token = code.join("");
+  const complete = token.length >= 4 && code.slice(0, 4).every(Boolean);
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
   const ss = String(seconds % 60).padStart(2, "0");
+
+  async function handleVerify() {
+    if (!complete || verifying) return;
+    if (!email.trim()) {
+      setErrorMsg("Alamat email tidak ditemukan. Silakan kembali dan masukkan email.");
+      return;
+    }
+
+    setErrorMsg("");
+    setVerifying(true);
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token,
+        type: "recovery",
+      });
+      if (error) {
+        setErrorMsg(error.message || "Kode OTP tidak valid atau sudah kedaluwarsa.");
+        setVerifying(false);
+        return;
+      }
+      onNext();
+    } catch {
+      setErrorMsg("Gagal memverifikasi kode OTP.");
+    } finally {
+      setVerifying(false);
+    }
+  }
+
+  async function handleResend() {
+    if (seconds > 0) return;
+    setErrorMsg("");
+    setSeconds(START);
+    setCode(["", "", "", "", "", ""]);
+    refs.current[0]?.focus();
+    if (email.trim()) {
+      await supabase.auth.resetPasswordForEmail(email.trim()).catch(() => {});
+    }
+  }
 
   return (
     <>
@@ -44,11 +88,11 @@ export default function OtpConfirm({ email, onBack, onNext }: Props) {
         </div>
 
         <h2 className="fp-heading fp-heading--muted">Masukan OTP</h2>
-        <p className="fp-otp-text">Kode OTP 4 digit telah dikirim ke ...</p>
+        <p className="fp-otp-text">Kode pemulihan telah dikirim ke ...</p>
         <p className="fp-otp-email">{email || "email@anda.com"}</p>
 
         <div className="fp-otp-row">
-          {code.map((d, i) => (
+          {code.slice(0, 4).map((d, i) => (
             <input
               key={i}
               ref={(el) => { refs.current[i] = el; }}
@@ -63,14 +107,21 @@ export default function OtpConfirm({ email, onBack, onNext }: Props) {
           ))}
         </div>
 
-        <button type="button" disabled={!complete} onClick={onNext} className="fp-button">
-          Verify
+        {errorMsg && <p className="fp-error">{errorMsg}</p>}
+
+        <button
+          type="button"
+          disabled={!complete || verifying}
+          onClick={handleVerify}
+          className="fp-button"
+        >
+          {verifying ? "Memverifikasi..." : "Verify"}
         </button>
 
         <button
           type="button"
           disabled={seconds > 0}
-          onClick={() => { setSeconds(START); setCode(["", "", "", ""]); refs.current[0]?.focus(); }}
+          onClick={handleResend}
           className="fp-resend"
         >
           Kirim ulang OTP{" "}
